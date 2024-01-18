@@ -16,6 +16,7 @@ class Sale extends Model
     protected $fillable = [
         'branch_id',
         'booking_id',
+        'service_id',
         'service',
         'amount',
         'add_on',
@@ -34,6 +35,7 @@ class Sale extends Model
         ->logOnly([
             'branch_id',
             'booking_id',
+            'service_id',
             'service',
             'amount',
             'add_on',

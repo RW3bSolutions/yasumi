@@ -91,6 +91,13 @@
               {{ errors.form.name[0] }}
             </div>
           </div>
+          <div class="q-mb-sm">
+            <q-input color="dark" label="Email *" square="" v-model="form.email" :dense="true" autofocus="">
+            </q-input>
+            <div class="text-caption text-red" v-if="errors.form.email && errors.show">
+              {{ errors.form.email[0] }}
+            </div>
+          </div>
           <div>
             <q-input color="dark" label="Cotact No. * (ex. 09xxxxxxxxx)" square="" v-model="form.contact_no" :dense="true" mask="###########">
             </q-input>
@@ -144,6 +151,13 @@ export default defineComponent({
           sortable: true
         },
         {
+          name: 'email',
+          label: 'EMAIL',
+          field: row => row.email,
+          align: 'left',
+          sortable: true
+        },
+        {
           name: 'contact_no',
           label: 'CONTACT NO.',
           field: row => row.contact_no,
@@ -168,12 +182,14 @@ export default defineComponent({
       ifView: false,
       form: {
         name: null,
+        email: null,
         contact_no: null
       },
       errors: {
         show: false,
         form: {
           name: null,
+          email: null,
           contact_no: null
         }
       },
@@ -227,6 +243,7 @@ export default defineComponent({
       this.errors.show = false
       this.submitted = false
       this.form.name = null
+      this.form.email = null
       this.form.contact_no = null
     },
     store () {
@@ -234,6 +251,7 @@ export default defineComponent({
       this.errors.show = false
       this.$api.post('branch/customers', {
         name: this.form.name,
+        email: this.form.email,
         contact_no: this.form.contact_no
       }, {
         headers: {
@@ -266,6 +284,7 @@ export default defineComponent({
       this.submitted = false
       this.object = param
       this.form.name = param.name
+      this.form.email = param.email
       this.form.contact_no = param.contact_no
     },
     update () {
@@ -273,6 +292,7 @@ export default defineComponent({
       this.errors.show = false
       this.$api.post('branch/customers/' + this.object.id, {
         name: this.form.name,
+        email: this.form.email,
         contact_no: this.form.contact_no,
         _method: 'PUT'
       }, {
@@ -282,6 +302,7 @@ export default defineComponent({
       })
         .then(response => {
           this.object.name = this.form.name
+          this.object.email = this.form.email
           this.object.contact_no = this.form.contact_no
           this.modal = false
           this.$q.notify({

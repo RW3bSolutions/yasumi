@@ -16,6 +16,7 @@ class Customer extends Model
     protected $fillable = [
         'branch_id',
         'name',
+        'email',
         'contact_no'
     ];
 
@@ -29,6 +30,7 @@ class Customer extends Model
         return LogOptions::defaults()
         ->logOnly([
             'name',
+            'email',
             'contact_no'
         ])
         ->useLogName('Customer')

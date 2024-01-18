@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('branch_id')->nullable();
             $table->bigInteger('booking_id')->nullable();
             $table->string('code');
             $table->double('amount');

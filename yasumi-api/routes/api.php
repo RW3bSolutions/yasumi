@@ -65,6 +65,11 @@ Route::prefix('branch')->group(function (){
         Route::resource('pay-periods', BranchApi\PayPeriodController::class);
         Route::resource('services', BranchApi\ServiceController::class);
 
+        Route::resource('items', BranchApi\ItemController::class);
+        Route::resource('item-stocks', BranchApi\ItemStockController::class);
+        Route::resource('item-consumptions', BranchApi\ItemConsumptionController::class);
+
+
     });
 });
 

@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR lFr">
+  <q-layout view="hHh lpR lFr" v-if="!preload">
     <q-header elevated class="bg-green">
       <q-toolbar>
         <q-btn
@@ -54,44 +54,13 @@
             Customers
           </q-item-section>
         </q-item>
-        <q-item clickable to="/therapists" :active-class="$route.name == 'Therapists' ? 'text-green' : null">
-          <q-item-section side>
-            <q-icon name="diversity_1" :color="$route.name == 'Therapists' ? 'green' : null" />
-          </q-item-section>
-          <q-item-section class="text-weight-medium">
-            Therapists
-          </q-item-section>
-        </q-item>
-        <q-item clickable to="/employees" :active-class="$route.name == 'Employees' ? 'text-green' : null" v-if="role === 'Owner'">
-          <q-item-section side>
-            <q-icon name="people" :color="$route.name == 'Employees' ? 'green' : null" />
-          </q-item-section>
-          <q-item-section class="text-weight-medium">
-            Employees
-          </q-item-section>
-        </q-item>
+
         <q-item clickable to="/pay-periods" :active-class="$route.name == 'PayPeriods' ? 'text-green' : null" v-if="role === 'Owner'">
           <q-item-section side>
             <q-icon name="money" :color="$route.name == 'PayPeriods' ? 'green' : null" />
           </q-item-section>
           <q-item-section class="text-weight-medium">
             Payroll
-          </q-item-section>
-        </q-item>
-        <q-item clickable to="/rooms" :active-class="$route.name == 'Rooms' ? 'text-green' : null" v-if="role === 'Owner'">
-          <q-item-section side>
-            <q-icon name="bed" :color="$route.name == 'Rooms' ? 'green' : null" />
-          </q-item-section>
-          <q-item-section class="text-weight-medium">
-            Rooms
-          </q-item-section>
-        </q-item>
-        <q-item clickable to="/vouchers" :active-class="$route.name == 'Vouchers' ? 'text-green' : null">
-          <q-item-section side>
-            <q-icon name="loyalty" :color="$route.name == 'Vouchers' ? 'green' : null" />
-          </q-item-section>
-          <q-item-section class="text-weight-medium">
-            Vouchers
           </q-item-section>
         </q-item>
         <q-item clickable to="/sales" :active-class="$route.name == 'Sales' ? 'text-green' : null">
@@ -119,6 +88,63 @@
           </q-item-section>
         </q-item>
       </q-list>
+
+      <q-expansion-item
+          v-if="role === 'Owner'"
+          expand-separator
+          label="Settings"
+        >
+          <q-list>
+            <q-item clickable to="/services" :active-class="$route.name == 'Services' ? 'text-green' : null">
+              <q-item-section side>
+                <q-icon name="spa" :color="$route.name == 'Services' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Services
+              </q-item-section>
+            </q-item>
+            <q-item clickable to="/rooms" :active-class="$route.name == 'Rooms' ? 'text-green' : null" v-if="role === 'Owner'">
+              <q-item-section side>
+                <q-icon name="bed" :color="$route.name == 'Rooms' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Rooms
+              </q-item-section>
+            </q-item>
+            <q-item clickable to="/inventory" :active-class="$route.name == 'Inventory' ? 'text-green' : null">
+              <q-item-section side>
+                <q-icon name="category" :color="$route.name == 'Inventory' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Inventory
+              </q-item-section>
+            </q-item>
+            <q-item clickable to="/therapists" :active-class="$route.name == 'Therapists' ? 'text-green' : null">
+              <q-item-section side>
+                <q-icon name="diversity_1" :color="$route.name == 'Therapists' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Therapists
+              </q-item-section>
+            </q-item>
+            <q-item clickable to="/employees" :active-class="$route.name == 'Employees' ? 'text-green' : null" v-if="role === 'Owner'">
+              <q-item-section side>
+                <q-icon name="people" :color="$route.name == 'Employees' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Employees
+              </q-item-section>
+            </q-item>
+            <q-item clickable to="/vouchers" :active-class="$route.name == 'Vouchers' ? 'text-green' : null">
+              <q-item-section side>
+                <q-icon name="loyalty" :color="$route.name == 'Vouchers' ? 'green' : null" />
+              </q-item-section>
+              <q-item-section class="text-weight-medium">
+                Vouchers
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-expansion-item>
     </q-drawer>
 
     <div class="fixed-center text-center" v-if="preload">

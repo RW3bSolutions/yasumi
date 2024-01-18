@@ -25,6 +25,8 @@ class Booking extends Model
         'dp_payment_method',
         'fp',
         'fp_payment_method',
+        'name',
+        'contact_no',
         'status'
     ];
 

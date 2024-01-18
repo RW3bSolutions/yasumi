@@ -52,15 +52,21 @@ const routes = [
         path: '/pay-periods',
         component: () => import('pages/PayPeriods.vue')
       },
+
+      {
+        name: 'Services',
+        path: '/services',
+        component: () => import('pages/Services.vue')
+      },
       {
         name: 'Rooms',
         path: '/rooms',
         component: () => import('pages/Rooms.vue')
       },
       {
-        name: 'Services',
-        path: '/services',
-        component: () => import('pages/Services.vue')
+        name: 'Inventory',
+        path: '/inventory',
+        component: () => import('pages/Inventory.vue')
       },
       {
         name: 'Vouchers',

@@ -242,7 +242,7 @@
             <q-separator/>
             <q-card-section>
               <div class="row">
-                <div class="col-md-4 q-pa-sm">
+                <div class="col-12 col-sm-6 col-md-6 q-pa-sm">
                   <div class="q-mb-sm">
                     <q-input filled label="Time" dense v-model="form.time" mask="time" color="dark" readonly>
                       <template v-slot:before>
@@ -300,19 +300,8 @@
                     </div>
                   </div>
 
-                  <div class="bg-white text-teal text-right q-mb-sm" v-if="!submitted">
-                    <q-btn type="submit" color="green" label="Submit" class="full-width" />
-                  </div>
-                  <div class="text-center" v-if="submitted">
-                    <q-spinner
-                      color="primary"
-                      size="md"
-                      :thickness="10"
-                    />
-                  </div>
-
                 </div>
-                <div class="col-md-4 q-pa-sm">
+                <div class="col-12 col-sm-6 col-md-6 q-pa-sm">
                   <div class="text-caption text-red" v-if="errors.form.service_orders && errors.show">
                     {{ errors.form.service_orders[0] }}
                   </div>
@@ -352,31 +341,56 @@
                       </tr>
                     </tbody>
                   </q-markup-table>
+
+                  <div class="bg-white text-teal text-right q-mt-md" v-if="!submitted">
+                    <q-btn type="submit" color="dark" label="Submit" size="lg" class="full-width" />
+                  </div>
+                  <div class="text-center" v-if="submitted">
+                    <q-spinner
+                      color="primary"
+                      size="md"
+                      :thickness="10"
+                    />
+                  </div>
                 </div>
-                <div class="col-md-4 q-pa-sm">
-                  <q-markup-table separator="cell" dense>
-                    <thead>
-                      <tr class="bg-green text-white">
-                        <th colspan="3" class="text-left">
-                          SERVICES
-                        </th>
-                      </tr>
-                      <tr class="bg-grey-2">
-                        <th width="10%">-</th>
-                        <th class="text-left">Service</th>
-                        <th class="text-right">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(s, index) in service.rows" :key="index">
-                        <td>
-                          <q-btn label="Add" color="primary" @click="addCart(s)" size="sm" />
-                        </td>
-                        <td class="text-left" style="white-space: inherit;">{{ s.name }} <span v-if="s.add_on">(Add-On)</span></td>
-                        <td class="text-right">{{ numberFormat(s.amount) }}</td>
-                      </tr>
-                    </tbody>
-                  </q-markup-table>
+                <div class="col-12 col-sm-12 col-md-12 q-pa-sm">
+                  <div class="row">
+                    <div class="col-12 q-pa-sm text-weight-medium">
+                      SELECT SERVICES
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 q-pa-sm cursor-pointer" v-for="(s, index) in allServices" :key="index">
+                      <q-card @click="addCart(s)">
+                        <q-card-section>
+                          <q-item-label class="text-weight-medium self-center">
+                            <q-icon name="spa" color="green" class="q-mr-xs"/>
+                            {{ s.name }} <span v-if="s.add_on">(Add-On)</span>
+                            <div class="text-caption text-weight-medium float-right text-red">
+                              PHP {{ numberFormat(s.amount) }}
+                            </div>
+                          </q-item-label>
+                        </q-card-section>
+                      </q-card>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 q-pa-sm text-weight-medium">
+                      SELECT ADD-ONS
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 q-pa-sm cursor-pointer" v-for="(s, index) in addOnServices" :key="index">
+                      <q-card @click="addCart(s)">
+                        <q-card-section>
+                          <q-item-label class="text-weight-medium self-center">
+                            <q-icon name="spa" color="green" class="q-mr-xs"/>
+                            {{ s.name }} <span v-if="s.add_on">(Add-On)</span>
+                            <div class="text-caption text-weight-medium float-right text-red">
+                              PHP {{ numberFormat(s.amount) }}
+                            </div>
+                          </q-item-label>
+                        </q-card-section>
+                      </q-card>
+                    </div>
+                  </div>
                 </div>
               </div>
             </q-card-section>
@@ -387,6 +401,12 @@
 
     <q-dialog v-model="therapist.modal">
     <q-card style="width: 700px; max-width: 80vw;">
+      <q-card-section class="text-weight-medium text-white bg-green">
+        {{ sale.service }}
+        <div class="text-caption">
+          Select Therapist:
+        </div>
+      </q-card-section>
       <div>
         <q-list dense>
           <q-item tag="label" v-ripple v-for="(t_row, i) in therapist.rows" :key="i">
@@ -414,16 +434,23 @@
       <q-card style="width: 700px; max-width: 80vw;">
         <q-card-section>
           <q-input v-model="customer.search" label="Search Customer" dense color="dark" autofocus="" filled @keyup.enter="searchCustomer(customer.search)">
-          <template v-slot:after>
+            <template v-slot:before>
+              <q-btn icon="add" color="dark" @click="customer.add = true, form.name = null, form.contact_no = null, form.email = null" />
+            </template>
+            <template v-slot:after>
               <q-btn icon="search" round color="primary" @click="searchCustomer(customer.search)" />
             </template>
           </q-input>
+          <div class="text-caption text-red" v-if="errors.form.customer && errors.show">
+            {{ errors.form.customer[0] }}
+          </div>
         </q-card-section>
         <q-separator v-if="customer.rows.length" />
         <q-markup-table v-if="customer.rows.length" separator="cell" dense>
           <thead>
             <tr>
-              <th class="text-left">Customer Name</th>
+              <th class="text-left">Name</th>
+              <th class="text-left">Email</th>
               <th class="text-left">Contact No.</th>
               <th width="10%" class="text-center">Action</th>
             </tr>
@@ -431,6 +458,7 @@
           <tbody>
             <tr v-for="(c_row, c_index) in customer.rows" :key="c_index">
               <td class="text-left">{{ c_row.name }}</td>
+              <td class="text-left">{{ c_row.email }}</td>
               <td class="text-left">{{ c_row.contact_no }}</td>
               <td class="text-center">
                 <span class="text-weight-medium text-primary text-center cursor-pointer" @click="customer.object = c_row, customer.modal = false">SELECT</span>
@@ -440,6 +468,56 @@
         </q-markup-table>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="customer.add">
+    <q-card style="width: 700px; max-width: 80vw;">
+      <form @submit.prevent="storeCustomer()">
+        <q-card-section>
+          <div class="text-h6">NEW CUSTOMER</div>
+          <div class="text-caption text-red">
+            Required *
+          </div>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section>
+          <div class="q-mb-sm">
+            <q-input color="dark" label="Name *" square="" v-model="form.name" :dense="true" autofocus="">
+            </q-input>
+            <div class="text-caption text-red" v-if="errors.form.name && errors.show">
+              {{ errors.form.name[0] }}
+            </div>
+          </div>
+          <div class="q-mb-sm">
+            <q-input color="dark" label="Email *" square="" v-model="form.email" :dense="true" autofocus="">
+            </q-input>
+            <div class="text-caption text-red" v-if="errors.form.email && errors.show">
+              {{ errors.form.email[0] }}
+            </div>
+          </div>
+          <div>
+            <q-input color="dark" label="Cotact No. * (ex. 09xxxxxxxxx)" square="" v-model="form.contact_no" :dense="true" mask="###########">
+            </q-input>
+            <div class="text-caption text-red" v-if="errors.form.contact_no && errors.show">
+              {{ errors.form.contact_no[0] }}
+            </div>
+          </div>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section class="bg-white text-teal" v-if="!submitted">
+          <q-btn type="submit" class="full-width" color="green" label="Save" />
+        </q-card-section>
+        <q-card-section class="text-center" v-if="submitted">
+          <q-spinner
+            color="primary"
+            size="md"
+            :thickness="10"
+          />
+
+        </q-card-section>
+        <q-separator/>
+      </form>
+    </q-card>
+  </q-dialog>
 
   </div>
 </template>
@@ -461,6 +539,9 @@ export default defineComponent({
       room: '',
       modal: false,
       form: {
+        name: null,
+        email: null,
+        contact_no: null,
         room_id: null,
         time: null,
         dp_payment_method: null,
@@ -471,6 +552,9 @@ export default defineComponent({
       errors: {
         show: false,
         form: {
+          name: null,
+          email: null,
+          contact_no: null,
           room_id: null,
           time: null,
           customer: null,
@@ -512,7 +596,8 @@ export default defineComponent({
         object: null,
         preload: true,
         rows: [],
-        modal: false
+        modal: false,
+        add: false
       },
       resched: {
         date: null
@@ -551,6 +636,7 @@ export default defineComponent({
     },
 
     searchCustomer (param) {
+      this.errors.show = false
       this.customer.rows = []
       this.$api.get('branch/customers/' + param, {
         headers: {
@@ -560,6 +646,44 @@ export default defineComponent({
         .then(response => {
           this.customer.rows = response.data
           this.customer.preload = false
+        })
+        .catch(error => {
+          if (error.response.status === 422) {
+            this.errors.form = error.response.data.errors
+            this.errors.show = true
+          }
+        })
+    },
+
+    storeCustomer () {
+      this.submitted = true
+      this.errors.show = false
+      this.$api.post('branch/customers', {
+        name: this.form.name,
+        email: this.form.email,
+        contact_no: this.form.contact_no
+      }, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+        .then(response => {
+          this.customer.rows.push(response.data)
+          this.submitted = false
+          this.customer.add = false
+          this.$q.notify({
+            progress: true,
+            type: 'positive',
+            message: 'Success',
+            icon: 'check'
+          })
+        })
+        .catch(error => {
+          if (error.response.status === 422) {
+            this.errors.form = error.response.data.errors
+            this.errors.show = true
+          }
+          this.submitted = false
         })
     },
 
@@ -762,6 +886,12 @@ export default defineComponent({
         total += v.amount
       })
       return total
+    },
+    allServices () {
+      return this.service.rows.filter(v => !v.add_on)
+    },
+    addOnServices () {
+      return this.service.rows.filter(v => v.add_on)
     }
   }
 })

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\Branch;
 
-use App\Http\Controllers\Controller;
 use App\Models\Expense;
-use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
+use App\Models\ExpenseCategory;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class ExpenseController extends Controller
 {
@@ -14,6 +15,14 @@ class ExpenseController extends Controller
     {
         if ($request->branch_id) {
             return Expense::where('branch_id', $request->branch_id)->get();
+        }
+
+        if ($request->dashboard) {
+            return ExpenseCategory::withCount([
+                'expenses as total_expenses' => function ($q) {
+                    $q->select(DB::raw("SUM(amount) as total_sum"));
+                }
+            ])->get();
         }
 
         return Expense::where('branch_id', auth()->user()->branchAccess->branch->id)->get();

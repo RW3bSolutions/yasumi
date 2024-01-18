@@ -12,9 +12,10 @@ class Item extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
+        'branch_id',
         'name',
         'unit',
-        'inventory'
+        'stock'
     ];
 
     protected $hidden = [
@@ -28,9 +29,9 @@ class Item extends Model
         ->logOnly([
             'name',
             'unit',
-            'inventory'
+            'stock'
         ])
-        ->useLogName('Branch')
+        ->useLogName('Item')
         ->logOnlyDirty();
     }
 }

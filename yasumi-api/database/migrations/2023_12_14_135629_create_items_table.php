@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('branch_id');
             $table->string('name');
             $table->string('unit');
-            $table->integer('inventory');
+            $table->bigInteger('stock')->default(0);
             $table->timestamps();
         });
     }

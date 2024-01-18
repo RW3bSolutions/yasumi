@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('branch_id');
             $table->bigInteger('booking_id');
+            $table->bigInteger('service_id');
             $table->string('service');
             $table->double('amount');
             $table->boolean('add_on')->default(0);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Expense;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -30,6 +31,11 @@ class ExpenseCategory extends Model
         ])
         ->useLogName('Expense Category')
         ->logOnlyDirty();
+    }
+
+    public function expenses ()
+    {
+        return $this->hasMany(Expense::class, 'expense_category', 'name');
     }
 
 }

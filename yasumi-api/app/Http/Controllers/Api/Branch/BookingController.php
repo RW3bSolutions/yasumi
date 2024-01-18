@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Branch;
 
 use App\Models\Sale;
 use App\Models\Booking;
+use App\Models\Service;
 use App\Models\Voucher;
+use App\Models\Customer;
 use App\Models\Therapist;
 use App\Models\Commission;
 use Illuminate\Http\Request;
@@ -35,8 +37,12 @@ class BookingController extends Controller
 
         $total = 0;
 
+        $customer = Customer::find($request->customer);
+
         $request->request->add([
             'customer_id' => $request->customer,
+            'name' => $customer->name,
+            'contact_no' => $customer->contact_no,
             'branch_id' => auth()->user()->branchAccess->branch->id,
             'total_amount' => 0
         ]);
@@ -44,9 +50,11 @@ class BookingController extends Controller
         $booking = Booking::create($request->all());
 
         foreach ($request->service_orders as $key => $value) {
+            $service = Service::where('name', $value['service'])->first();
             Sale::create([
                 'branch_id' => auth()->user()->branchAccess->branch->id,
                 'booking_id' => $booking->id,
+                'service_id' => $service->id,
                 'service' => $value['service'],
                 'amount' => $value['amount'],
                 'add_on' => $value['add_on'],

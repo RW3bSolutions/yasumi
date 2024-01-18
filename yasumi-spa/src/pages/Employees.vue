@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-px-md q-py-xs">
+  <div class="row q-px-md q-py-xs" v-if="role === 'Owner'">
     <div class="col-12 col-md-6 q-py-sm self-center">
       <q-breadcrumbs gutter="sm">
         <q-breadcrumbs-el label="Employees" class="text-weight-medium" />
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div class="q-pb-sm q-px-md">
+  <div class="q-pb-sm q-px-md" v-if="role === 'Owner'">
     <div class="text-center q-pa-md" v-if="preload">
       <q-spinner
         color="green"

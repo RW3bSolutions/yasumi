@@ -16,6 +16,7 @@ class CustomerController extends Controller
     public function store (Request $request)
     {
         $request->validate([
+            'email' => 'required|unique:customers,email',
             'name' => 'required|unique:customers,name',
             'contact_no' => 'required'
         ]);
@@ -24,14 +25,13 @@ class CustomerController extends Controller
             'branch_id' => auth()->user()->branchAccess->branch->id
         ]);
 
-        Customer::create($request->all());
-
-        return 1;
+        return Customer::create($request->all());;
     }
 
     public function update (Request $request, $id)
     {
         $request->validate([
+            'email' => 'required|unique:customers,email,' . $id,
             'name' => 'required|unique:customers,name,' . $id,
             'contact_no' => 'required'
         ]);
@@ -43,7 +43,18 @@ class CustomerController extends Controller
 
     public function show (Request $request, $id)
     {
-        return Customer::where('branch_id', auth()->user()->branchAccess->branch->id)->where('name', 'like', '%' . $id . '%')->get();
+        $customer = Customer::where('branch_id', auth()->user()->branchAccess->branch->id)->where('name', 'like', '%' . $id . '%')->get();
+
+        if (count($customer) == 0) {
+            return response()->json([
+                'errors' => [
+                    'customer' => ['No Data found!']
+                ]
+            ], 422);
+        }
+
+        return $customer;
+
     }
 
     public function destroy (Request $request, $id)

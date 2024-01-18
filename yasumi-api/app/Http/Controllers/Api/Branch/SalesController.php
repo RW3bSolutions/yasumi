@@ -16,6 +16,12 @@ class SalesController extends Controller
             })->get();
         }
 
+        if ($request->dashboard) {
+            return Sale::where('branch_id', auth()->user()->branchAccess->branch->id)->whereHas('booking', function ($q){
+                $q->where('status', 'Completed');
+            })->sum('amount');
+        }
+
         return Sale::with('booking:id,customer_id,date', 'booking.customer:id,name,contact_no')->where('branch_id', auth()->user()->branchAccess->branch->id)->whereHas('booking', function ($q){
             $q->where('status', 'Completed');
         })->get();
